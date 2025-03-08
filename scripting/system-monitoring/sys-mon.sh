@@ -18,7 +18,6 @@ function cpu_usage_processes {
 }
 
 function list_bigger_files {
-
     file_out=`find $1 -type f -size +$FILESIZE | wc -l`
     if [ $file_out -gt 0 ]; then
         echo "Below files are greater than $FILESIZE under $1"
@@ -27,7 +26,28 @@ function list_bigger_files {
         echo "$1 directory don't have any files greater than $FILESIZE"
     fi
 }
-# cpu_usage_processes
-list_bigger_files "/home"
-list_bigger_files "/var"
 
+function http_server_running {
+    http=`netstat -altnp | grep LISTEN | grep :80 | wc -l`
+    if [ $http -gt 0 ]; then
+        echo "Apache2 is running"
+    else
+        echo "Apache2 is not running"
+    fi
+}
+
+function memory_usage_in_percentage {
+    mem_use=`free -m | awk '/^Mem:/ {printf "%d\n", ($3/$2)*100}'`
+    if [ $mem_use -lt 50 ]; then
+        echo -e "$(tput setaf 2) Memory is Stable at $mem_use $(tput sgr0)"
+    else
+        echo -e "$(tput setaf 1) Memory is not Stable at $mem_use $(tput sgr0)"
+    fi
+}
+
+
+# cpu_usage_processes
+# list_bigger_files "/home"
+# list_bigger_files "/var"
+# http_server_running
+memory_usage_in_percentage
