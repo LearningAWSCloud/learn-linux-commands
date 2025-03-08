@@ -46,8 +46,8 @@ function memory_usage_in_percentage {
 }
 
 
-# cpu_usage_processes
-# list_bigger_files "/home"
-# list_bigger_files "/var"
-# http_server_running
+cpu_usage_processes
+list_bigger_files "/home"
+list_bigger_files "/var"
+http_server_running
 memory_usage_in_percentage
