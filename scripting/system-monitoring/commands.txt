@@ -1,0 +1,95 @@
+top -b -n 1 -i
+
+apt-get install cpulimit  ## limits the CPU usage of a process
+
+dpkg-query -s net-tools
+    arp, ifconfig, netstat, rarp, nameif and route.
+
+lsb_release -r
+
+lsof - list open files
+
+df -h
+
+du -hc --max-depth=2 /var | sort -hr
+
+find / -type f -name core.* 2>/dev/null
+
+uptime | sed -e 's/.*load average: \(.*\...\), \(.*\...\), \(.*\...\)/\1/' -e 's/ //g'  
+
+ps aux --sort -%cpu | head
+
+netstat -an |grep :80| awk '{print $5}' | sed 's/::ffff://'| cut -d':' -f1 | sort | uniq -c |sort -nr |head
+
+sar | tail
+
+ping -c 1 google.com
+
+ip -o addr | awk '/inet /{print "  IP (" $2 "):\t" $4}'
+/sbin/route -n | awk '/^0.0.0.0/{ printf "  Gateway:\t"$2"\n" }'
+cat /etc/resolv.conf | awk '/^nameserver/{ printf "  Name Server:\t" $2 "\n"}'
+
+awk '/model name/  {ORS=""; count++; if ( count == 1 ) print  $0; }  END {  print " : " count "\n" }' /proc/cpuinfo
+
+cat /etc/*release
+
+free -mot
+
+cat /proc/cpuinfo
+
+
+cat /proc/cpuinfo | grep "model name\|processor" | awk ' /processor/{printf "Processor:\t" $3 } /model name/
+{i=4
+while(i<=NF){
+ printf $i
+  if(i<NF){
+    printf " "
+  }
+  i++
+}
+printf "\n"
+}'
+
+
+
+cat /proc/cpuinfo | awk '
+/^processor/ {
+    printf "Processor:\t%d\n", $3
+}
+/^model name/ {
+    printf "Model Name:\t"
+    for (i = 4; i <= NF; i++) {
+        printf "%s%s", $i, (i < NF ? " " : "\n")
+    }
+}'
+
+
+awk '/model name/  {ORS=""; count++; if ( count == 1 ) print  $0; }  END {  print " : " count "\n" }' /proc/cpuinfo
+cat /proc/loadavg | awk '{print $1}' | awk -F '.' '{print $1}'
+
+grep -c processor /proc/cpuinfo
+
+ps aux | grep init | grep -v grep | column -t
+
+lscpu |grep "CPU(s):" |awk '{ print $2 }' |head -1`@ `cat /proc/cpuinfo |grep @ | awk '{ print $9 }'
+free -m |sed -n '2p' |awk '{ print $2 }'MB
+df -h |sed -n '1p'| awk '{ print $2,$3,$4,$5 }'
+df -h |sed -n '2p'| awk '{ print $2, $3,$4,$5 }'
+cat /etc/userdomains | awk '{print $1}' | wc -l
+cat /etc/*release |head -1
+uname -r
+echo -e "$(tput setaf 1) Version Outdated! Latest - $wpcurrver $(tput sgr0)" -> 1 to 7
+
+df -h |LC_ALL=C fgrep 100% |awk '{print $5}'|tr -d '%'|head -1
+df -i |LC_ALL=C fgrep 100% |awk '{print $5}'|tr -d '%'|head -1
+LC_ALL=C fgrep -i "$(date +"%Y-%m-%d")" /var/log/exim_mainlog |LC_ALL=C fgrep -c "too many syntax"
+
+
+echo "Top 5 IPs Connected to port 80"
+netstat -nut|awk '$4~/:80$/ {print $5}'|cut -f-1 -d:|sort|uniq -c|sort -rn|head -5
+uname -r|grep -i server
+
+apt install stress
+stress --vm 1 --vm-bytes 500M --timeout 60s
+
+
